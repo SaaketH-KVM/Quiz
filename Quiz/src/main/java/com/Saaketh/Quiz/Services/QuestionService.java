@@ -1,9 +1,11 @@
 package com.Saaketh.Quiz.Services;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.Saaketh.Quiz.Models.Question;
@@ -15,25 +17,44 @@ public class QuestionService {
 	@Autowired
 	private QuestionRepository questionrepository;
 
-	public List<Question> getAllQuestions() {
-		// TODO Auto-generated method stub
-		return questionrepository.findAll();
+	public ResponseEntity<List<Question>> getAllQuestions() {
+		try {
+			return new ResponseEntity<>(questionrepository.findAll(), HttpStatus.OK);	
+		}catch (Exception e)
+		{
+			e.printStackTrace();}
+		
+		return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);	
 	}
 
-	public List<Question> getAllQuestionByCategory(String category) {
-		// TODO Auto-generated method stub
-		return questionrepository.findByCategory(category);
+
+	public ResponseEntity<List<Question>>getAllQuestionByCategory(String category) {
+		
+			try {
+				return new ResponseEntity<>(questionrepository.findByCategory(category), HttpStatus.OK);	
+			}catch (Exception e)
+			{
+				e.printStackTrace();}
+			
+			return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);	
+		
 	}
 	
-	public Optional<Question> getAllQuestionById(Integer questionId) {
-		// TODO Auto-generated method stub
-		return questionrepository.findById(questionId);
+//	public Optional<Question> getAllQuestionById(Integer questionId) {
+//		return questionrepository.findById(questionId);
+//	}
+	public ResponseEntity<Question> getAllQuestionById(Integer questionId) {
+	    Question question = questionrepository.findById(questionId).orElse(null);
+	    if (question != null) {
+	        return ResponseEntity.ok(question);
+	    } else {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    }
 	}
 
-	public String addQuestion(Question question) {
-		// TODO Auto-generated method stub
+	public ResponseEntity<String> addQuestion(Question question) {
 		questionrepository.save(question);
-		return "success";
+		return new ResponseEntity<>("success",HttpStatus.CREATED);
 	}
 
 	public String deleteById(Integer deleteId) {

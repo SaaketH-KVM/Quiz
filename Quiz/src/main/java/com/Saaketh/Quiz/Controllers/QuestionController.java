@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,24 +22,30 @@ public class QuestionController {
 	private QuestionService questionservice;
 	
 	@GetMapping("/giveall")
-	public List<Question> getAllQuestions() {
+	public ResponseEntity<List<Question>> getAllQuestions() {
 		return questionservice.getAllQuestions();
 	}
 	
 	@GetMapping("/category/{category}")
-	public List<Question> getAllQuestionByCategory(@PathVariable String category) {
+	public ResponseEntity<List<Question>> getAllQuestionByCategory(@PathVariable String category) {
 		return questionservice.getAllQuestionByCategory(category);
 	
 	}
 	
+//	@GetMapping("/QuestionId/{questionId}")
+//	public Optional<Question> getAllQuestionById(@PathVariable Integer questionId) {
+//		return questionservice.getAllQuestionById(questionId);
+//	
+//	}
 	@GetMapping("/QuestionId/{questionId}")
-	public Optional<Question> getAllQuestionById(@PathVariable Integer questionId) {
+	public ResponseEntity<Question> getAllQuestionById(@PathVariable Integer questionId) {
 		return questionservice.getAllQuestionById(questionId);
 	
 	}
 	
+	
 	@PostMapping("/add")
-	public String addQuestion(Question question) {
+	public ResponseEntity<String> addQuestion(Question question) {
 		return questionservice.addQuestion(question);
 	}
 	
